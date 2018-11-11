@@ -9,7 +9,7 @@ from db_map import Base, MediaIds
 from config import TOKEN, MY_ID, DB_FILENAME, PROXY, PROXY_AUTH
 
 logging.basicConfig(format=u'%(filename)s [ LINE:%(lineno)+3s ]#%(levelname)+8s [%(asctime)s]  %(message)s',
-                    level=logging.DEBUG)
+                    level=logging.ERROR)
 
 engine = create_engine(f'sqlite:///{DB_FILENAME}')
 

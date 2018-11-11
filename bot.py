@@ -95,6 +95,18 @@ async def process_testpre_command(message: types.Message):
 @dp.message_handler()
 async def echo_message(msg: types.Message):
     await bot.send_message(msg.from_user.id, msg.text)
+    print(f'{msg.from_user.id},'
+          f'{msg.text}')
+
+
+@dp.message_handler(content_types=ContentType.PHOTO)
+async def photo_message(msg: types.Message):
+    cicle = 10
+    message_text = text('1')
+    while cicle != 0:
+        await msg.md_text(message_text)
+        cicle -= 1
+    print(f'{msg}')
 
 
 @dp.message_handler(content_types=ContentType.ANY)
@@ -103,9 +115,7 @@ async def unknown_message(msg: types.Message):
                         italic('\nЯ просто напомню,'), 'что есть',
                         code('команда'), '/help')
     await msg.reply(message_text, parse_mode=ParseMode.MARKDOWN)
-
+    print(f'{msg}')
 
 if __name__ == '__main__':
     executor.start_polling(dp)
-
-
