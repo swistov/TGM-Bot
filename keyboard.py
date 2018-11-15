@@ -11,8 +11,8 @@ weather_button.add(weather_now, weather_tomorrow)
 #     InlineKeyboardMarkup, InlineKeyboardButton
 
 #
-greet_kb = ReplyKeyboardMarkup()
-del_kb = ReplyKeyboardRemove()
+# greet_kb = ReplyKeyboardMarkup()
+# del_kb = ReplyKeyboardRemove()
 #
 #
 # inline kb
