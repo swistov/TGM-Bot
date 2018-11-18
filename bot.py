@@ -36,9 +36,11 @@ async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
         humidity = wn.get_humidity()
         if detail == 'пасмурно':
             detail = detail.title() + emojize(' ☁️')
+        elif detail == 'слегка облачно':
+            detail = detail.split()[0].title() + ' ' + detail.split()[1] + emojize(' ⛅')
 
         weather = f'За окном: {detail}\n' \
-                  f'Температура: {temp_now} C\n' \
+                  f'Температура: {temp_now} ℃\n' \
                   f'Скорость ветер: {wind} м/с\n' \
                   f'Влажность: {humidity} %'
         await bot.answer_callback_query(
