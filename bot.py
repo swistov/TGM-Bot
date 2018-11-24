@@ -12,11 +12,12 @@ from aiogram.dispatcher import Dispatcher
 # from aiogram.types import ParseMode, InputMediaPhoto, InputMediaVideo, ChatActions
 # from aiogram.types import ParseMode
 
-from config import TOKEN, PROXY, PROXY_AUTH
+from config import TOKEN, PROXY, PROXY_AUTH, LOGFILE
 from temperature import weather_now as wn
 
 logging.basicConfig(format=u'%(filename)s [ LINE:%(lineno)+3s ]#%(levelname)+8s [%(asctime)s]  %(message)s',
-                    level=logging.INFO)
+                    level=logging.INFO,
+                    filename=LOGFILE)
 
 # Start BOT
 bot = Bot(token=TOKEN, proxy=PROXY, proxy_auth=PROXY_AUTH)
@@ -49,32 +50,11 @@ async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
         await bot.answer_callback_query(callback_query.id, f'Данная кнопка пока не настроена! code={code_button}')
 
 
-# @dp.message_handler(commands=['start'])
-# async def process_start_command(msg: types.Message):
-#     await msg.reply('Привет!', reply_markup=kb.greet_kb)
-#
-#
-# @dp.message_handler(commands=['help'])
-# async def process_help_command(message: types.Message):
-#     msg = text(
-#         'Если нужно узнать погоду:',
-#         '/weather и выбери день',
-#         sep="\n"
-#     )
-#
-#     await message.reply(msg, parse_mode=ParseMode.MARKDOWN)
-#
-
 @dp.message_handler(commands=['weather'])
 async def get_weather_now(message: types.Message):
-    await message.reply('Хочешь узнать погоду?', reply_markup=kb.weather_button)
+    await message.reply('Хочешь узнать погоду? Жми кнопку ...', reply_markup=kb.weather_button)
 
 
-# @dp.message_handler(commands=['rm'])
-# async def process_start_command(msg: types.Message):
-#     await msg.reply('Пока!', reply_markup=kb.del_kb)
-
-#
 # @dp.message_handler(content_types=ContentType.PHOTO)
 # async def photo_message(msg: types.Message):
 #     try:
