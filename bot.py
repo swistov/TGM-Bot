@@ -12,12 +12,11 @@ from aiogram.dispatcher import Dispatcher
 # from aiogram.types import ParseMode, InputMediaPhoto, InputMediaVideo, ChatActions
 # from aiogram.types import ParseMode
 
-from config import TOKEN, PROXY, PROXY_AUTH, LOGFILE
+from config import TOKEN, PROXY, PROXY_AUTH
 from temperature import weather_now as wn
 
 logging.basicConfig(format=u'%(filename)s [ LINE:%(lineno)+3s ]#%(levelname)+8s [%(asctime)s]  %(message)s',
-                    level=logging.INFO,
-                    filename=LOGFILE)
+                    level=logging.INFO)
 
 # Start BOT
 bot = Bot(token=TOKEN, proxy=PROXY, proxy_auth=PROXY_AUTH)
@@ -26,6 +25,21 @@ dp = Dispatcher(bot)
 
 @dp.callback_query_handler(lambda c: c.data and c.data.startswith('btn'))
 async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
+    def emoji_button(weather_detail):
+        if weather_detail == 'пасмурно':
+            weather_emoji = emojize(' ☁️')
+        elif weather_detail == 'слегка облачно':
+            weather_emoji = emojize(' ⛅')
+        elif weather_detail == 'облачно':
+            weather_emoji = emojize(' ☁️')
+
+        if len(weather_detail.split()) == 1:
+            weather_detail = weather_detail.title()
+        elif len(weather_detail.split) == 2:
+            weather_detail = weather_detail.split()[0].title() + weather_detail.split()[1]
+
+        return weather_detail + weather_emoji
+
     code_button = callback_query.data[-1]
     if code_button.isdigit():
         code_button = int(code_button)
@@ -33,12 +47,12 @@ async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
     if code_button == 1:
         temp_now = wn.get_temperature('celsius')['temp']
         wind = wn.get_wind()['speed']
-        detail = wn.get_detailed_status()
+        detail = emoji_button(wn.get_detailed_status())
         humidity = wn.get_humidity()
-        if detail == 'пасмурно':
-            detail = detail.title() + emojize(' ☁️')
-        elif detail == 'слегка облачно':
-            detail = detail.split()[0].title() + ' ' + detail.split()[1] + emojize(' ⛅')
+        # if detail == 'пасмурно':
+        #     detail = detail.title() + emojize(' ☁️')
+        # elif detail == 'слегка облачно':
+        #     detail = detail.split()[0].title() + ' ' + detail.split()[1] + emojize(' ⛅')
 
         weather = f'За окном: {detail}\n' \
                   f'Температура: {temp_now} ℃\n' \
@@ -52,9 +66,14 @@ async def process_callback_kb1btn1(callback_query: types.CallbackQuery):
 
 @dp.message_handler(commands=['weather'])
 async def get_weather_now(message: types.Message):
-    await message.reply('Хочешь узнать погоду? Жми кнопку ...', reply_markup=kb.weather_button)
+    await message.reply('Хочешь узнать погоду?', reply_markup=kb.weather_button)
 
 
+# @dp.message_handler(commands=['rm'])
+# async def process_start_command(msg: types.Message):
+#     await msg.reply('Пока!', reply_markup=kb.del_kb)
+
+#
 # @dp.message_handler(content_types=ContentType.PHOTO)
 # async def photo_message(msg: types.Message):
 #     try:
