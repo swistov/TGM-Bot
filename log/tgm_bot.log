@@ -1,4 +1,0 @@
-executor.py [ LINE:290 ]#    INFO [2018-11-19 00:22:22,903]  Bot: test_tgm_bot [@test_tgm_bot]
-dispatcher.py [ LINE:231 ]#    INFO [2018-11-19 00:22:22,903]  Start polling.
-dispatcher.py [ LINE:291 ]#    INFO [2018-11-19 00:23:11,768]  Stop polling...
-executor.py [ LINE:255 ]# WARNING [2018-11-19 00:23:11,769]  Goodbye!
