@@ -5,7 +5,7 @@ from aiogram import Bot, types
 from aiogram.utils import executor
 from aiogram.dispatcher import Dispatcher
 
-from config import TOKEN, PROXY, LOGFILE, ACCUWEATHER_ID, ACCUWEATHER_KEY, MY_ID
+from config import TOKEN, PROXY, LOGFILE, ACCUWEATHER_ID, ACCUWEATHER_KEY, MY_ID, HOME_CHAT, EPTA_CHAT
 
 from accuweather.weather import Accu
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -14,7 +14,7 @@ logging.basicConfig(format=u'%(filename)s [ LINE:%(lineno)+3s ]#%(levelname)+8s 
                     level=logging.INFO, filename=LOGFILE)
 
 # Start BOT
-bot = Bot(token=TOKEN, proxy=PROXY)
+bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
 
 
@@ -44,11 +44,14 @@ async def get_weather_now(message: types.Message):
 
 async def msg():
     aw = Accu()
-    await bot.send_message(MY_ID, aw.weather_now(ACCUWEATHER_KEY, ACCUWEATHER_ID))
+    weather = aw.weather_now(ACCUWEATHER_KEY, ACCUWEATHER_ID)
+    for chat in HOME_CHAT, EPTA_CHAT:
+        await bot.send_message(chat, weather)
 
 if __name__ == '__main__':
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(msg, 'interval', start_date='2010-12-06 07:00:00', days=1)
+    scheduler.add_job(msg, 'interval', days=1, start_date="2010-12-06 07:00:00", timezone='Europe/Moscow')
     scheduler.start()
 
     executor.start_polling(dp)
+
