@@ -4,18 +4,16 @@ import keyboard as kb
 from aiogram import Bot, types
 from aiogram.utils import executor
 from aiogram.dispatcher import Dispatcher
-
-from config import TOKEN, PROXY, LOGFILE, ACCUWEATHER_ID, ACCUWEATHER_KEY, MY_ID, HOME_CHAT, EPTA_CHAT
-
-from accuweather.weather import Accu
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
+from accuweather.weather import Accu
+from config import TOKEN, PROXY, LOGFILE, ACCUWEATHER_ID, ACCUWEATHER_KEY, HOME_CHAT, EPTA_CHAT
+
+
+bot = Bot(token=TOKEN, proxy=PROXY)
+dp = Dispatcher(bot)
 logging.basicConfig(format=u'%(filename)s [ LINE:%(lineno)+3s ]#%(levelname)+8s [%(asctime)s]  %(message)s',
                     level=logging.INFO, filename=LOGFILE)
-
-# Start BOT
-bot = Bot(token=TOKEN)
-dp = Dispatcher(bot)
 
 
 @dp.callback_query_handler(lambda c: c.data and c.data.startswith('btn'))
@@ -54,4 +52,3 @@ if __name__ == '__main__':
     scheduler.start()
 
     executor.start_polling(dp)
-

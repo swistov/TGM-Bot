@@ -6,10 +6,10 @@ class Accu(object):
     def __init__(self):
         pass
 
-    def api_connect(self, api, location_id):
+    def api_connect(self, key, id):
         try:
-            url = f'http://dataservice.accuweather.com/currentconditions/v1/{location_id}?' \
-                f'apikey={api}&details=true&language=ru'
+            url = f'http://dataservice.accuweather.com/currentconditions/v1/{id}?' \
+                f'apikey={key}&details=true&language=ru'
         except:
             return 'Ошибка в API'
 
@@ -21,9 +21,9 @@ class Accu(object):
 
         return data
 
-    def weather_now(self, api, location_id):
+    def weather_now(self, accu_key, accu_id):
         # print(json.dumps(data, indent=4, sort_keys=True))
-        data = self.api_connect(api, location_id)
+        data = self.api_connect(accu_key, accu_id)
 
         if type(data) == urllib.error.HTTPError:
             return data
@@ -36,7 +36,7 @@ class Accu(object):
             f"Влажность: {data[0]['RelativeHumidity']}%\n" \
             f"Облачность: {data[0]['CloudCover']}%\n" \
             f"Скорость ветра: {data[0]['Wind']['Speed']['Metric']['Value']} км/ч\n" \
-            f"Давление: {data[0]['Pressure']['Metric']['Value']} {data[0]['Pressure']['Metric']['Unit']}"
+            f"Давление: {data[0]['Pressure']['Metric']['Value'] // 1.333} мм. рт. ст."
 
     def weather_today(self):
         return 'На данный момент сервис не доступен'
